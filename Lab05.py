@@ -13,43 +13,23 @@ class BST:
 
     def insert(self, data):
         pNew = BSTNode(data)
-        if self.root is None:
+        if self.is_empty():
             self.root = pNew
         else:
-            current_node = self.root
-            while current_node:
-                if data < current_node.data:
-                    if current_node.left is None:
-                        current_node.left = pNew
+            start = self.root
+            while start:
+                if data < start.data:
+                    if start.left is None:
+                        start.left = pNew
                         break
                     else:
-                        current_node = current_node.left
+                        start = start.left
                 else:
-                    if current_node.right is None:
-                        current_node.right = pNew
+                    if start.right is None:
+                        start.right = pNew
                         break
                     else:
-                        current_node = current_node.right
-
-    def delete(self, data):
-        def deleteNode(root, data):
-            if root is None:
-                return None
-            if data < root.data:
-                return deleteNode(root.left, data)
-            elif data > root.data:
-                return deleteNode(root.right, data)
-            else:
-                if root.left is None:
-                    return root.right
-                elif root.right is None:
-                    return root.left
-                else:
-                    minNode = self.findMin(root.right)
-                    root.data = minNode
-                    root.right = deleteNode(root.right, minNode)
-            return root
-        self.root = deleteNode(self.root, data)
+                        start = start.right
 
     def preorder(self, root):
         if root != None:
@@ -70,26 +50,27 @@ class BST:
             print("->", root.data, end=" ")
 
     def traverse(self):
-        print("Preorder: ", end="")
-        self.preorder(self.root)
-        print("\nInorder: ", end="")
-        self.inorder(self.root)
-        print("\nPostorder: ", end="")
-        self.postorder(self.root)
+        if self.is_empty():
+            print("Empty tree")
+        else:
+            print("Preorder:", end="")
+            self.preorder(self.root)
+            print("\nInorder:", end="")
+            self.inorder(self.root)
+            print("\nPostorder:", end="")
+            self.postorder(self.root)
 
-    def findMin(self, current_node=None):
-        if current_node is None:
-            current_node = self.root
-        while current_node.left is not None:
-            current_node = current_node.left
-        return current_node.data
+    def findMin(self):
+        start = self.root
+        while start.left:
+            start = start.left
+        return start.data
 
-    def findMax(self, current_node=None):
-        if current_node is None:
-            current_node = self.root
-        while current_node.right is not None:
-            current_node = current_node.right
-        return current_node.data
+    def findMax(self):
+        start = self.root
+        while start.right:
+            start = start.right
+        return start.data
 
 def test():
     myBST = BST()
@@ -98,10 +79,7 @@ def test():
     myBST.insert(7)
     myBST.insert(10)
     myBST.insert(33)
-    # myBST.traverse()
-    myBST.delete(14)
     myBST.traverse()
     print("\nMin:", myBST.findMin())
     print("Max:", myBST.findMax())
-
 test()
